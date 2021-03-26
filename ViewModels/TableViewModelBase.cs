@@ -166,6 +166,19 @@ namespace StockInventoryAndBillingSystem.ViewModels
             }
         }
 
+        private ICommand _saveOrderCommand;
+        public ICommand SaveOrderCommand
+        {
+            get
+            {
+                return _saveOrderCommand;
+            }
+            set
+            {
+                _saveOrderCommand = value;
+            }
+        }
+
         private ObservableCollection<TableDetails> _tableDetails;
         public ObservableCollection<TableDetails> TableDetails
         {
@@ -387,9 +400,32 @@ namespace StockInventoryAndBillingSystem.ViewModels
 
             DeleteRowCommand = new RelayCommand(new Action<object>(DeleteLastRow));
 
+            SaveOrderCommand = new RelayCommand(new Action<object>(SaveOrder));
+
             _selectedWaiter = _waiterList[0];
 
             _selectedCashier = _cashierList[0];
+        }
+
+        private void SaveOrder(object obj)
+        {
+            int tableId = 2;
+
+            var order = CreateOrder();
+
+            order.ItemsList = new List<Item>();
+
+            SaveItemsToOrder(order);
+        }
+
+        private void SaveItemsToOrder(Order order)
+        {
+            DataService.SaveItemsToOrder(order);
+        }
+
+        private Order CreateOrder()
+        {
+            return DataService.CreateNewOrder();
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

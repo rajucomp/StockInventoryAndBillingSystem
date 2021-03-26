@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,23 @@ namespace StockInventoryAndBillingSystem
     /// </summary>
     public partial class App : Application
     {
+        //public App()
+        //{
+        //    ServiceCollection services = new ServiceCollection();
+        //    ConfigureServices(services);
+        //    serviceProvider = services.BuildServiceProvider();
+        //}
+
+        //private ServiceProvider serviceProvider;
+        //private void ConfigureServices(ServiceCollection services)
+        //{
+        //    var configuration = new MapperConfiguration(cfg =>
+        //    {
+                
+        //    });
+
+        //    services.adda
+
+        //}
     }
 }

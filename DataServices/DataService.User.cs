@@ -44,6 +44,92 @@ namespace StockInventoryAndBillingSystem.DataServices
             _users = GetUsers();
         }
 
+        public static Order CreateNewOrder()
+        {
+            Order newOrder = new Order();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_hgiDocumentsConnectionString))
+                {
+                    conn.Open();
+
+
+                    string sql = string.Format(ItemSQLStatements.NewOrderSQLStatement, 1, 1, "NOW()", 100.00M);
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                    
+
+
+                    using (MySqlDataReader mySqlDataReader = cmd.ExecuteReader())
+                    {
+                        while (mySqlDataReader.Read())
+                        {
+                            newOrder.OrderId = Convert.ToInt32(mySqlDataReader["orderId"]);
+                            newOrder.PaymentStatusId = Convert.ToInt32(mySqlDataReader["PaymentStatusId"]);
+                            newOrder.OrderDate = Convert.ToDateTime(mySqlDataReader["OrderDate"]);
+                            newOrder.OrderTotal = Convert.ToDecimal(mySqlDataReader["orderId"]);
+                        }
+                        mySqlDataReader.Close();
+                    }
+
+                        sql = "SELECT LAST_INSERT_ID()";
+                        cmd = new MySqlCommand(sql, conn);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            int r = Convert.ToInt32(result);
+                        newOrder.OrderId = r;
+                            Console.WriteLine("Number of countries in the world database is: " + r);
+                        }
+
+
+
+                    conn.Close();
+                }
+            }
+            catch(Exception ex)
+            {
+                string message = ex.Message.ToString();
+            }
+
+            return newOrder;
+        }
+
+        public static bool SaveItemsToOrder(Order order)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_hgiDocumentsConnectionString))
+                {
+                    conn.Open();
+
+                    foreach(Item item in order.ItemsList)
+                    {
+                        string sql = string.Format(ItemSQLStatements.OrderDetailsInsertStatement, order.OrderId, item.ItemId, item.Quantity);
+                        MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                        using (MySqlDataReader mySqlDataReader = cmd.ExecuteReader())
+                        {
+
+                            mySqlDataReader.Close();
+                        }
+                    }
+
+                    
+
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message.ToString();
+
+                return false;
+            }
+
+            return true;
+        }
+
         private static IList<Item> GetItems()
         {
             try
@@ -66,6 +152,7 @@ namespace StockInventoryAndBillingSystem.DataServices
                         {
                             Item item = new Item()
                             {
+                                ItemId = Convert.ToInt32(mySqlDataReader["itemId"]),
                                 ItemCode = Convert.ToInt32(mySqlDataReader["itemCode"]),
                                 ItemName = mySqlDataReader["itemDescription"].ToString(),
                                 Price = mySqlDataReader["itemPrice"] != null ? Convert.ToDecimal(mySqlDataReader["itemPrice"]) : 0M,
