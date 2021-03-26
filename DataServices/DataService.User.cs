@@ -91,43 +91,6 @@ namespace StockInventoryAndBillingSystem.DataServices
                 return itemsList;
             }
 
-            //    var fileName = string.Format(@"C:\Users\guptraju\Downloads\Menu Excel.xlsx");
-
-            //    var connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0}; Extended Properties=Excel 12.0;", fileName);
-
-            //    var adapter = new OleDbDataAdapter("SELECT * FROM [Menu$]", connectionString);
-            //    var ds = new DataSet();
-
-            //    adapter.Fill(ds, "anyNameHere");
-
-            //    DataTable data = ds.Tables["anyNameHere"];
-
-
-
-            //    foreach (DataRow row in data.Rows)
-            //    {
-            //        try
-            //        {
-            //            Item item = new Item()
-            //            {
-            //                ItemCode = Convert.ToInt32(row["Item Code"]),
-            //                ItemName = row["Item Name"].ToString(),
-            //                Price = row["Price"] != null ? Convert.ToDecimal(row["Price"]) : 0M,
-            //                Quantity = row["Quantity"] != null ? Convert.ToDecimal(row["Quantity"]) : 0M
-            //            };
-
-
-            //        }
-            //        catch(Exception ex)
-            //        {
-            //            string error = ex.Message.ToString();
-            //        }
-
-
-            //    }
-
-            //    return itemsList;
-            //}
             catch (Exception ex)
             {
                 string errorMessage = ex.Message.ToString();
