@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.InversionOfControl.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:System.InversionOfControl.Abstractions.IIocContainer">
+            <summary>
+            Represents an abstraction layer for inversion of control containers.
+            </summary>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``1(System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to itself in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``1(System.Type,System.Boolean,System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to itself in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <param name="whenInjectedInto">The type is only resolved when it is injected into this type.</param>
+            <param name="onlyInjectExactlyInto">Determines whether the type is resolved when being injected into the specified type and its sub-types only only when being injected into the specified type.</param>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``2(System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to the specified type in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <typeparam name="U">The type to which the registered type is being bound.</typeparam>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``2(System.Type,System.Boolean,System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to the specified type in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <typeparam name="U">The type to which the registered type is being bound.</typeparam>
+            <param name="whenInjectedInto">The type is only resolved when it is injected into this type.</param>
+            <param name="onlyInjectExactlyInto">Determines whether the type is resolved when being injected into the specified type and its sub-types only only when being injected into the specified type.</param>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``1(System.Func{``0},System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to the specified factory method in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <param name="factory">The factory method that resolves the registered type.</param>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IIocContainer.RegisterType``1(System.Func{``0},System.Type,System.Boolean,System.InversionOfControl.Abstractions.Scope)">
+            <summary>
+            Registers a type and binds it to the specified factory method in the specified scope.
+            </summary>
+            <typeparam name="T">The type that is to be registered.</typeparam>
+            <param name="factory">The factory method that resolves the registered type.</param>
+            <param name="whenInjectedInto">The type is only resolved when it is injected into this type.</param>
+            <param name="onlyInjectExactlyInto">Determines whether the type is resolved when being injected into the specified type and its sub-types only only when being injected into the specified type.</param>
+            <param name="scope">The scope in which the type should be resolved.</param>
+        </member>
+        <member name="T:System.InversionOfControl.Abstractions.IReadOnlyIocContainer">
+            <summary>
+            Represents an abstraction layer for inversion of control containers, which can only resolve instances but not register types.
+            </summary>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IReadOnlyIocContainer.GetInstance``1">
+            <summary>
+            Resolves an instance of the specified type.
+            </summary>
+            <typeparam name="T">The type that is to be resolved.</typeparam>
+            <returns>Returns a resolved instance of the specified type.</returns>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IReadOnlyIocContainer.GetInstance``1(System.Object[])">
+            <summary>
+            Resolves an instance of the specified type.
+            </summary>
+            <typeparam name="T">The type that is to be resolved.</typeparam>
+            <param name="constructorParameters">Constructor parameters, which are preferred over registered types.</param>
+            <returns>Returns a resolved instance of the specified type.</returns>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IReadOnlyIocContainer.GetInstance(System.Type)">
+            <summary>
+            Resolves an instance of the specified type.
+            </summary>
+            <param name="typeToResolve">The type that is to be resolved.</param>
+            <returns>Returns a resolved instance of the specified type.</returns>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.IReadOnlyIocContainer.GetInstance(System.Type,System.Object[])">
+            <summary>
+            Resolves an instance of the specified type.
+            </summary>
+            <param name="typeToResolve">The type that is to be resolved.</param>
+            <param name="constructorParameters">Constructor parameters, which are preferred over registered types.</param>
+            <returns>Returns a resolved instance of the specified type.</returns>
+        </member>
+        <member name="T:System.InversionOfControl.Abstractions.ObjectExtensions">
+            <summary>
+            Represents a set of extension methods for <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="M:System.InversionOfControl.Abstractions.ObjectExtensions.Inject``1(``0,System.Object)">
+            <summary>
+            Injects the properties of the second object into the properties with the same name of the first object.
+            </summary>
+            <typeparam name="T">The type of the object into which is being injected.</typeparam>
+            <param name="objectToInjectInto">The object into which the properties are to be injected.</param>
+            <param name="injectionValues">An anonymous object, whose properties are matched to the properties of the object into which is being injected and assigns all possible values.</param>
+            <returns>Returns the object into which the properties were injected.</returns>
+        </member>
+        <member name="T:System.InversionOfControl.Abstractions.Scope">
+            <summary>
+            Represents an enumeration of the scopes in which a type can be resolved.
+            </summary>
+        </member>
+        <member name="F:System.InversionOfControl.Abstractions.Scope.Transient">
+            <summary>
+            Each time a type is resolved, a new instance is created.
+            </summary>
+        </member>
+        <member name="F:System.InversionOfControl.Abstractions.Scope.Singleton">
+            <summary>
+            A new instance of a type that is being resolved is only created once. If it already exists, then the type is resolved to the existing instance.
+            </summary>
+        </member>
+    </members>
+</doc>

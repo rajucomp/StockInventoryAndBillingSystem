@@ -1,0 +1,1153 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.Windows.Documents.Reporting</name>
+    </assembly>
+    <members>
+        <member name="T:System.Windows.Documents.Reporting.Document">
+            <summary>
+            Represents the core component of the reporting engine, which can be used in XAML to create documents. Documents consist of a list of parts, which in turn contain the actual content.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Document.Parts">
+            <summary>
+            Gets a list of the parts of the document. The parts are the actual content of the document.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.Document.pageNumberPropertyKey">
+            <summary>
+            Contains a read-only dependency property, which always contains the current page number. This can be used to render page numbers within the XAML document, by binding to it.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.Document.PageNumberProperty">
+            <summary>
+            Contains the actual page number dependency property, which is available in XAML.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.Document.totalNumberOfPagesPropertyKey">
+            <summary>
+            Contains a read-only dependency property, which always contains the total number of pages. This can be used to render page numbers within the XAML document, by binding to it.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.Document.TotalNumberOfPagesProperty">
+            <summary>
+            Contains the actual total number of pages dependency property, which is available in XAML.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Document.RenderAsync(System.Object,System.IProgress{System.Double})">
+            <summary>
+            Renders the document, by rendering each part of the document and concatenating them.
+            </summary>
+            <param name="dataContext">The data context, which is to be used during rendering. The document and its parts can bind to the contents of the data context.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.DocumentPart">
+            <summary>
+            Represents the abstract base class for all kinds of document parts. Document parts make up the content of a document.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.DocumentPart.RenderAsync(System.Object,System.IProgress{System.Double})">
+            <summary>
+            Renders the document part.
+            </summary>
+            <param name="dataContext">The data context, that is to be used during the rendering. The document part can bind to the content of this data context.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns a list of rendered fixed pages, which can then be added to the document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.DocumentPart.FindVisualChild``1(System.Windows.DependencyObject)">
+            <summary>
+            A helper method, which makes it possible to find a child dependency object within the specified dependency object.
+            </summary>
+            <typeparam name="T">The type of dependency object that is to be searched for.</typeparam>
+            <param name="dependencyObject">The dependency object within is to be searched.</param>
+            <returns>Returns the first child of the specified type that was found. If not child of the specified type was found, then <c>null</c> is returned.</returns>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.FlowPart">
+            <summary>
+            Represents a document part, which has flowing content. The flowing content is then paginated by using a fixed page.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.FlowPart.PageTemplate">
+            <summary>
+            Gets or sets the page template, which is used during the rendering process to paginate the flow document. The page template can be used to render content that should be visible on all pages (e.g. headers, footers, page numbers, etc.).
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.FlowPart.Content">
+            <summary>
+            Gets or sets the flowing content of the document. This content can be designed regardless of the document size. The content is automatically paginated during the rendering process, and wrapped in a page using the page template.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.FlowPart.RenderAsync(System.Object,System.IProgress{System.Double})">
+            <summary>
+            Paginates the flowing content, wraps the pages in the page defined by the page template, and renders the pages.
+            </summary>
+            <param name="dataContext">The data context, that is to be used during the rendering. The document part can bind to the content of this data context.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns the renderd pages.</returns>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.HtmlConverter">
+            <summary>
+            Represents a simple HTML converter, which parses the HTML and convertes it to a flow document, which can then be used to renders PDFs or XPSs.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.HtmlConverter.htmlElementConversionMap">
+            <summary>
+            Contains a dictionary, which maps the name of an HTML element to a method, which converts this HTML element to a flow document element.,
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.GetRunsAndLineBreaks(System.Windows.Documents.InlineCollection)">
+            <summary>
+            Retrieves all the runs and line breaks inside an inline collection recursively. This is very useful for white-space character handling.
+            </summary>
+            <param name="inlineCollection">The inline collection from which the runs and line breaks are to be retrieved.</param>
+            <returns>Returns a list of runs and line breaks from the specified inline collection in the order that they appear within the inline collection.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ApplyWhiteSpaceHandling(System.Collections.Generic.IEnumerable{System.Windows.Documents.Block})">
+            <summary>
+            Applies the proper white-space character handling to the converted contents.
+            </summary>
+            <param name="blockElements">The block elements to which white-space character handling is to be applied.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertTextElementsToBlocks(System.Collections.Generic.IEnumerable{System.Windows.Documents.TextElement})">
+            <summary>
+            Converts a list of text elements into a list of blocks by wrapping inline elements in block elements.
+            </summary>
+            <param name="textElements">The text elements that are to be converted into a list of block elements.</param>
+            <returns>Returns the converted list of block elements.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.InitializeHtmlElementConversionMap">
+            <summary>
+            Initializes the dictionary, which maps the name of an HTML element to a method, which converts the HTML element to a flow document element.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertHtmlNode(AngleSharp.Dom.INode)">
+            <summary>
+            Converts the specified HTML node into flow document content element.
+            </summary>
+            <param name="htmlNode">The HTML node that is to be converted into flow document content element.</param>
+            <returns>Returns the converted flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertLineBreakElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified line break HTML element to a line break flow document element.
+            </summary>
+            <param name="lineBreakHtmlElement">The line break HTML element that is to be converted.</param>
+            <returns>Returns a line break flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertParagraphElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified paragraph HTML element to a paragraph flow document element.
+            </summary>
+            <param name="paragraphHtmlElement">The paragraph HTML element that is to be converted.</param>
+            <returns>Returns a paragraph flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertPreformattedTextElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified preformatted text HTML element to a paragraph flow document element, where the white-space character handling is skipped.
+            </summary>
+            <param name="paragraphHtmlElement">The preformatted text HTML element that is to be converted.</param>
+            <returns>Returns a paragraph flow document element, where the white-space character handling is skipped.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertSectionElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified section HTML element to a section flow document element.
+            </summary>
+            <param name="sectionHtmlElement">The section HTML element that is to be converted.</param>
+            <returns>Returns a section flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertDivisionElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified div HTML element to a section flow document element.
+            </summary>
+            <param name="divisionHtmlElement">The div HTML element that is to be converted.</param>
+            <returns>Returns a section flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertSpanElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified span HTML element to a span flow document element.
+            </summary>
+            <param name="spanHtmlElement">The span HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertEmphasisElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified emphasis (or italics) HTML element to a span flow document element, which has an italic font style.
+            </summary>
+            <param name="emphasisHtmlElement">The emphasis (or italics) HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which has an italic font style.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertStrongElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified strong (or bold) HTML element to a span flow document element, which has a bold font style.
+            </summary>
+            <param name="strongHtmlElement">The strong (or bold) HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which has a bold font style.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertSmallElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified small HTML element to a span flow document element, which has a smaller font size.
+            </summary>
+            <param name="smallHtmlElement">The small HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which has a smaller font size.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertHorizontalRulerElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified horizontal ruler HTML element to a table flow document element, which simulates the horizontal line.
+            </summary>
+            <param name="smallHtmlElement">The horizontal ruler HTML element that is to be converted.</param>
+            <returns>Returns a table flow document element, which simulates the horizontal line.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertQuotationElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified quotatiopn HTML element to a span flow document element, which is wrapped in quotation marks.
+            </summary>
+            <param name="quotationHtmlElement">The quotation HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which is wrapped in quotation marks.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertStrikeThroughElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified strike-through HTML element to a span flow document element, which is striked through.
+            </summary>
+            <param name="strikeThroughHtmlElement">The strike-through HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which is striked through.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertUnderlineElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified underline HTML element to a span flow document element, which is underlined.
+            </summary>
+            <param name="underlineHtmlElement">The underline HTML element that is to be converted.</param>
+            <returns>Returns a span flow document element, which is underlined.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertAnchorElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified anchor HTML element to a hyperlink flow document element.
+            </summary>
+            <param name="anchorHtmlElement">The anchor HTML element that is to be converted.</param>
+            <returns>Returns a hyperlink flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertHeadingElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified heading HTML element to a paragraph flow document element, which has the correct font size.
+            </summary>
+            <param name="headingHtmlElement">The heading HTML element that is to be converted.</param>
+            <returns>Returns a paragraph flow document element, which has the correct font size.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertBlockQuoteElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified block quote HTML element to a paragraph flow document element, which is styled like a block quote.
+            </summary>
+            <param name="blockQuoteHtmlElement">The block quote HTML element that is to be converted.</param>
+            <returns>Returns a paragraph flow document element, which is styled like a block quote.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertSubscriptElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified subscript HTML element to a run flow document element, which is in subscript.
+            </summary>
+            <param name="subscriptHtmlElement">The subscript HTML element that is to be converted.</param>
+            <returns>Returns a run flow document element, which is in subscript.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertSuperscriptElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified superscript HTML element to a run flow document element, which is in superscript.
+            </summary>
+            <param name="superscriptHtmlElement">The superscript HTML element that is to be converted.</param>
+            <returns>Returns a run flow document element, which is in superscript.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertListElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified ordered or unordered list HTML element to a list flow document element.
+            </summary>
+            <param name="listHtmlElement">The ordered or unordered list HTML element that is to be converted.</param>
+            <returns>Returns a list flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertListItemElement(AngleSharp.Dom.Html.IHtmlElement)">
+            <summary>
+            Converts the specified list item HTML element to a list item flow document element.
+            </summary>
+            <param name="listItemHtmlElement">The list item HTML element that is to be converted.</param>
+            <returns>Returns a list item flow document element.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromStreamAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Converts the HTML in the specified stream into flow document content.
+            </summary>
+            <param name="stream">The stream that contains the HTML that is to be converted.</param>
+            <param name="cancellationToken">The cancellation token, which can be used to cancel the parsing and converting of the HTML.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromStreamAsync(System.IO.Stream)">
+            <summary>
+            Converts the HTML in the specified stream into flow document content.
+            </summary>
+            <param name="stream">The stream that contains the HTML that is to be converted.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromUriAsync(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Downloads the HTML from the specified URI and converts it into flow document content.
+            </summary>
+            <param name="uri">The URI from which the HTML is to be loaded.</param>
+            <param name="cancellationToken">The cancellation token, which can be used to cancel the parsing and converting of the HTML.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be downloaded or parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromUriAsync(System.Uri)">
+            <summary>
+            Downloads the HTML from the specified URI and converts it into flow document content.
+            </summary>
+            <param name="uri">The URI from which the HTML is to be loaded.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be downloaded or parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromFileAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts the specified HTML file into flow document content.
+            </summary>
+            <param name="fileName">The name of the HTML file, that is to be loaded and converted into flow document content.</param>
+            <param name="cancellationToken">The cancellation token, which can be used to cancel the parsing and converting of the HTML.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">If the specified file could not be found, then a <see cref="T:System.IO.FileNotFoundException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromFileAsync(System.String)">
+            <summary>
+            Converts the specified HTML file into flow document content.
+            </summary>
+            <param name="fileName">The name of the HTML file, that is to be loaded and converted into flow document content.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">If the specified file could not be found, then a <see cref="T:System.IO.FileNotFoundException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromStringAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Converts the specified HTML into flow document content.
+            </summary>
+            <param name="html">The HTML string that is to be converted into flow document content.</param>
+            <param name="cancellationToken">The cancellation token, which can be used to cancel the parsing and converting of the HTML.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.ConvertFromStringAsync(System.String)">
+            <summary>
+            Converts the specified HTML into flow document content.
+            </summary>
+            <param name="html">The HTML string that is to be converted into flow document content.</param>
+            <exception cref="T:System.InvalidOperationException">If the HTML could not be parsed, then an <see cref="T:System.InvalidOperationException"/> exception is thrown.</exception>
+            <returns>Returns the converted flow document content.</returns>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.HtmlConverter.HtmlElementConverterAttribute">
+            <summary>
+            Represents an attribute, which marks a method as a converter for an HTML element.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.HtmlConverter.HtmlElementConverterAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.HtmlConverter.HtmlElementConverterAttribute"/> instance.
+            </summary>
+            <param name="htmlElementName">The name of the HTML element that the method, which was marked with this attribute, is able to convert.</param>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.HtmlConverter.HtmlElementConverterAttribute.HtmlElementName">
+            <summary>
+            Gets the name of the HTML element that the method, which was marked with this attribute, is able to convert.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.HtmlSection">
+            <summary>
+            Represents a section which converts HTML into a flow document content.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.HtmlSection.ContentProperty">
+            <summary>
+            Contains the dependency property for the HTML content of the <see cref="T:System.Windows.Documents.Reporting.HtmlSection"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.HtmlSection.Content">
+            <summary>
+            Gets or sets the HTML content, which is to be displayed in the <see cref="T:System.Windows.Documents.Reporting.HtmlSection"/>.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.ItemsParagraph">
+            <summary>
+            Represents a paragraph that created inlines based on the elements in the items source.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsParagraph.ItemsSourceProperty">
+            <summary>
+            Contains the dependency property for the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsParagraph.ItemsSource">
+            <summary>
+            Gets or sets the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsParagraph.ItemTemplateProperty">
+            <summary>
+            Contains the dependency property for the template of the inlines of the <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsParagraph.ItemTemplate">
+            <summary>
+            Gets or sets the template for the inlines of the <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsParagraph.AlternationCountProperty">
+            <summary>
+            Contains the dependency property for the alternation count of <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsParagraph.AlternationCount">
+            <summary>
+            Gets or sets the alternation count of the <see cref="T:System.Windows.Documents.Reporting.ItemsParagraph"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsParagraph.alternationIndexPropertyKey">
+            <summary>
+            Contains a read-only dependency property, which always contains the current alternation index.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsParagraph.AlternationIndexProperty">
+            <summary>
+            Contains the actual alternation index dependency property, which is available in XAML.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ItemsParagraph.UpdateContent">
+            <summary>
+            Updates the content of the paragraph.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.ItemsSection">
+            <summary>
+            Represents a paragraph that created blocks based on the elements in the items source.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsSection.ItemsSourceProperty">
+            <summary>
+            Contains the dependency property for the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsSection.ItemsSource">
+            <summary>
+            Gets or sets the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsSection.ItemTemplateProperty">
+            <summary>
+            Contains the dependency property for the template of the blocks of the <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsSection.ItemTemplate">
+            <summary>
+            Gets or sets the template for the blocks of the <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsSection.AlternationCountProperty">
+            <summary>
+            Contains the dependency property for the alternation count of <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsSection.AlternationCount">
+            <summary>
+            Gets or sets the alternation count of the <see cref="T:System.Windows.Documents.Reporting.ItemsSection"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsSection.alternationIndexPropertyKey">
+            <summary>
+            Contains a read-only dependency property, which always contains the current alternation index.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsSection.AlternationIndexProperty">
+            <summary>
+            Contains the actual alternation index dependency property, which is available in XAML.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ItemsSection.UpdateContent">
+            <summary>
+            Updates the content of the section.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.ItemsTableRowGroup">
+            <summary>
+            Represents a table row group that created rows based on the elements in the items source.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsTableRowGroup.ItemsSourceProperty">
+            <summary>
+            Contains the dependency property for the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsTableRowGroup.ItemsSource">
+            <summary>
+            Gets or sets the items source of the <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsTableRowGroup.ItemTemplateProperty">
+            <summary>
+            Contains the dependency property for the template of the rows of the <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsTableRowGroup.ItemTemplate">
+            <summary>
+            Gets or sets the template for the rows of the <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsTableRowGroup.AlternationCountProperty">
+            <summary>
+            Contains the dependency property for the alternation count of <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ItemsTableRowGroup.AlternationCount">
+            <summary>
+            Gets or sets the alternation count of the <see cref="T:System.Windows.Documents.Reporting.ItemsTableRowGroup"/>.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsTableRowGroup.alternationIndexPropertyKey">
+            <summary>
+            Contains a read-only dependency property, which always contains the current alternation index. This can be used to render a background for table rows.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ItemsTableRowGroup.AlternationIndexProperty">
+            <summary>
+            Contains the actual alternation index dependency property, which is available in XAML.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ItemsTableRowGroup.UpdateContent">
+            <summary>
+            Updates the content of the table row group.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.PagePart">
+            <summary>
+            Represents a document part, which has only one fixed page.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.PagePart.Page">
+            <summary>
+            Gets or sets the content of the page part.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.PagePart.RenderAsync(System.Object,System.IProgress{System.Double})">
+            <summary>
+            Renders the fixed page.
+            </summary>
+            <param name="dataContext">The data context, that is to be used during the rendering. The document part can bind to the content of this data context.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns a list, which only contains the single rendered fixed page.</returns>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter">
+            <summary>
+              Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter.ResourceManager">
+            <summary>
+              Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter.Culture">
+            <summary>
+              Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+              Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter.HtmlCouldNotBeParsedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The HTML could not be parsed. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter.HtmlFileCouldNotBeFoundExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The HTML file could not be found. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.HtmlConverter.HtmlPageCouldNotBeLoadedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The HTML page could not be loaded. ähnelt.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.Resources.Localization.ReportingService">
+            <summary>
+              Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.ResourceManager">
+            <summary>
+              Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.Culture">
+            <summary>
+              Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+              Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeExportedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be exported. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeExportedToPdfExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be exported to PDF. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeExportedToXpsExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be exported to XPS. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeInstantiatedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be instantiated. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeLoadedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be loaded from the XAML file, make sure, that the root element of the XAML file is of type Document. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.DocumentCouldNotBeRenderedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The document could not be rendered. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.ViewModelCouldNotBeInstantiatedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The view model of the view could not be instantiated. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.XamlFileCouldNotBeFoundExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The XAML file from which the document is to be loaded could not be found. ähnelt.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Resources.Localization.ReportingService.XamlFileCouldNotBeLoadedExceptionMessage">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The XAML file from which the document is to be loaded could not be loaded. ähnelt.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.SectionContainer">
+            <summary>
+            Represents a section that can be collapsed.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.SectionContainer.blocks">
+            <summary>
+            Contains the storage for block that are hidden.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.SectionContainer.VisibilityProperty">
+            <summary>
+            Contains the dependency property for the visibility of the blocks of the <see cref="T:System.Windows.Documents.Reporting.SectionContainer"/>.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.SectionContainer.Visibility">
+            <summary>
+            Gets or sets the template for the visibility of the blocks of the <see cref="T:System.Windows.Documents.Reporting.SectionContainer"/>.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.SectionContainer.UpdateContent">
+            <summary>
+            Updates the content of the section.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.Table`1">
+            <summary>
+            Represents a table which can be exported.
+            </summary>
+            <typeparam name="T">The data type which represents a table row.</typeparam>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Table`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.Table`1"/> instance.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Table`1.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.Table`1"/> instance.
+            </summary>
+            <param name="name">The name of the table.</param>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Table`1.Name">
+            <summary>
+            Gets or sets the name of the table.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Table`1.IncludeHeader">
+            <summary>
+            Gets or sets a value that determines whether a header row should be included.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Table`1.Rows">
+            <summary>
+            Gets the rows of the table.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Table`1.Columns">
+            <summary>
+            Gets the columns of the table.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.ReportingService">
+            <summary>
+            Represents a service which can be used to generate documents and tables. The service supports printing and export to formats like XAML, XPS, PDF, CSV or XLS(X).
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.#ctor(System.InversionOfControl.Abstractions.IReadOnlyIocContainer)">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.ReportingService"/> instance.
+            </summary>
+            <param name="iocContainer">The IOC container which is used to instantiate the documents and their corresponding view models.</param>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ReportingService.iocContainer">
+            <summary>
+            Contains the IOC container which is used to instantiate the documents and their corresponding view models.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.ReportingService.assemblyTypes">
+            <summary>
+            Contains all cached types of the assembly. The types are used when activating a view model convention-based.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ReportingService.ViewModelNamingConvention">
+            <summary>
+            Gets or sets the naming convention for view models. The function gets the name of the document type and returns the name of the corresponding view model. This function is used for convention-based view model activation. The default implementation adds "ViewModel" to the name of the document.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExecuteInStaThreadAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary>
+            Executes the specified method in an STA thread.
+            </summary>
+            <typeparam name="TDocument">The type of the result that is being returned.</typeparam>
+            <param name="method">The method that is to be executed in an STA thread.</param>
+            <param name="cancellationToken">The token that can be used to cancel the execution.</param>
+            <returns>Returns the result of the method execution.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderFixedDocumentAsync(System.Windows.Documents.Reporting.Document,System.Type,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Renders the specified document.
+            </summary>
+            <param name="document">The document that is to be rendered.</param>
+            <param name="viewModelType">The type of the view model that is to be instantiated and used for the rendering.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns the rendered document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderFixedDocumentAsync``1(System.Object,System.IProgress{System.Double})">
+            <summary>
+            Renders the specified document.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered.</typeparam>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderFixedDocumentAsync``1(System.String,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Loads the specified XAML file and renders it.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file that is to be loaded and rendered.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToXpsAsync``1(System.IO.Stream,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Exports a document to XPS.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="outputStream">The stream to which the file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToXpsAsync``1(System.String,System.IO.Stream,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Exports a document to XPS.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file from which the document, that is to be exported to XPS, should be loaded.</param>
+            <param name="outputStream">The stream to which the file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToXps(System.Windows.Documents.FixedDocument,System.IO.Stream)">
+            <summary>
+            Exports the specified rendered fixed document to XPS.
+            </summary>
+            <param name="fixedDocument">The fixed document that is to be exported to XPS.</param>
+            <param name="outputStream">The stream to which the file is written.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToPdfAsync``1(System.IO.Stream,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Exports a document to PDF.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="outputStream">The stream to which the file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToPdfAsync``1(System.String,System.IO.Stream,System.Object,System.IProgress{System.Double})">
+            <summary>
+            Exports a document to PDF.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file from which the document, that is to be exported to PDF, should be loaded.</param>
+            <param name="outputStream">The stream to which the file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToPdf(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Exports the specified rendered fixed document to PDF.
+            </summary>
+            <param name="inputStream">The input stream that contains the XPS document (there is no direct way to export a fixed document to PDF, so an XPS document is created first and then converted to PDF).</param>
+            <param name="outputStream">The stream to which the file is written.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToCsvAsync``1(System.Collections.Generic.IEnumerable{System.Windows.Documents.Reporting.Table{``0}},System.IO.Stream)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="tables">The tables which are to be exported.</param>
+            <param name="outputStream">The stream to which the CSV file is written.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportToXlsAsync``1(System.Collections.Generic.IEnumerable{System.Windows.Documents.Reporting.Table{``0}},System.IO.Stream,System.Boolean)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="tables">The tables which are to be exported.</param>
+            <param name="outputStream">The stream to which the XLS(X) file is written.</param>
+            <param name="useOpenXmlFormat">A value that determines whether the OpenXML format should be generated.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.Table{``0},System.Windows.Documents.Reporting.TableFormat,System.IO.Stream)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="table">The table which is to be exported.</param>
+            <param name="format">The output format.</param>
+            <param name="outputStream">The stream to which the output file is written.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.Table{``0},System.Windows.Documents.Reporting.TableFormat,System.String)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="table">The table which is to be exported.</param>
+            <param name="format">The output format.</param>
+            <param name="fileName">The name of the output file.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Collections.Generic.IEnumerable{System.Windows.Documents.Reporting.Table{``0}},System.Windows.Documents.Reporting.TableFormat,System.IO.Stream)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="tables">The tables which is to be exported.</param>
+            <param name="format">The output format.</param>
+            <param name="outputStream">The stream to which the output file is written.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Collections.Generic.IEnumerable{System.Windows.Documents.Reporting.Table{``0}},System.Windows.Documents.Reporting.TableFormat,System.String)">
+            <summary>
+            Exports a list of items with the specified columns to a file.
+            </summary>
+            <param name="tables">The table which is to be exported.</param>
+            <param name="format">The output format.</param>
+            <param name="fileName">The name of the output file.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderAsync``1(System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders the specified document.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered.</typeparam>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderAsync``1(System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders the specified document.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered.</typeparam>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderAsync``1(System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Loads the specified XAML file and renders it.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file that is to be loaded and rendered.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.RenderAsync``1(System.String,System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Loads the specified XAML file and renders it.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file that is to be loaded and rendered.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="cancellationToken">The token that can be used to cancel the rendering process.</param>
+            <returns>Returns the rendered fixed document.</returns>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.DocumentFormat,System.IO.Stream,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputStream">The output stream to which the rendered document file is written.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.DocumentFormat,System.IO.Stream,System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputStream">The output stream to which the rendered document file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.String,System.Windows.Documents.Reporting.DocumentFormat,System.IO.Stream,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file, which contains the document that is to be exported.</param>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputStream">The output stream to which the rendered document file is written.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.String,System.Windows.Documents.Reporting.DocumentFormat,System.IO.Stream,System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file, which contains the document that is to be exported.</param>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputStream">The output stream to which the rendered document file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.DocumentFormat,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="fileName">The name of the file to which the rendered document file is written.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.Windows.Documents.Reporting.DocumentFormat,System.String,System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TDocument">The type of document that is to be rendered and exported.</typeparam>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="fileName">The name of the file to which the rendered document file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.String,System.Windows.Documents.Reporting.DocumentFormat,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file, which contains the document that is to be exported.</param>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputFileName">The name of the file to which the rendered document file is written.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ReportingService.ExportAsync``1(System.String,System.Windows.Documents.Reporting.DocumentFormat,System.String,System.Object,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Renders and exports the specified document to the specified document format.
+            </summary>
+            <typeparam name="TViewModel">The type of the view model with which the document is to be rendered.</typeparam>
+            <param name="fileName">The name of the XAML file, which contains the document that is to be exported.</param>
+            <param name="documentFormat">The file format of the document to which it is to be exported.</param>
+            <param name="outputFileName">The name of the file to which the rendered document file is written.</param>
+            <param name="parameters">The parameters that are to be injected into the view model of the document.</param>
+            <param name="progress">The object which is used to report the progess of the rendering process.</param>
+            <param name="cancellationToken">The token that can be used to cancel the export.</param>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.Column`1">
+            <summary>
+            Represents the column of table which can be exported.
+            </summary>
+            <typeparam name="T">The data type which represents a table row.</typeparam>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Column`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.Column`1"/> instance.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Column`1.#ctor(System.Func{`0,System.String})">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.Column`1"/> instance.
+            </summary>
+            <param name="formatter">The formatter which formats the data.</param>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.Column`1.#ctor(System.String,System.Func{`0,System.String})">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.Column`1"/> instance.
+            </summary>
+            <param name="header">The header of the column.</param>
+            <param name="formatter">The formatter which formats the data.</param>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Column`1.Header">
+            <summary>
+            Gets or sets the header of the column.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.Column`1.Formatter">
+            <summary>
+            Gets or sets the formatter for the column.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.DocumentFormat">
+            <summary>
+            Represents a file format which can be used to export documents.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.DocumentFormat.Xps">
+            <summary>
+            The XPS format, which was developed by Microsoft and is a direct competitor to Adobe's PDF format.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.DocumentFormat.Pdf">
+            <summary>
+            The PDF format, which was developed by Adobe and is an international standard.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.TableFormat">
+            <summary>
+            Represents a file format which can be used to export tables.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.TableFormat.Csv">
+            <summary>
+            A comma separated list.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.TableFormat.Xls">
+            <summary>
+            The old Microsoft Excel workbook format.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.TableFormat.Xlsx">
+            <summary>
+            The Microsoft Excel OpenXML format.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.ViewModelAttribute">
+            <summary>
+            Represents an attribute which is used to specify the view model of a view.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.ViewModelAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes a new <see cref="T:System.Windows.Documents.Reporting.ViewModelAttribute"/> instance.
+            </summary>
+            <param name="viewModelType">The type of the view model for the view.</param>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.ViewModelAttribute.ViewModelType">
+            <summary>
+            Gets the type of the view model for the view.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Documents.Reporting.VisualHost">
+            <summary>
+            Represents a framework element, which can be used to render a visual. This is needed, because the result of the pagination process of a flow document is a visual, which can not be directly rendered.
+            </summary>
+        </member>
+        <member name="F:System.Windows.Documents.Reporting.VisualHost.VisualProperty">
+            <summary>
+            Contains a dependency property for the visual content of the visual host.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.VisualHost.Visual">
+            <summary>
+            Gets or sets the visual content of the visual host.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Documents.Reporting.VisualHost.VisualChildrenCount">
+            <summary>
+            Gets the number of visual children of the visual host. If the visual host contains a visual, then 1 is returned, if not then 0 is returned.
+            </summary>
+        </member>
+        <member name="M:System.Windows.Documents.Reporting.VisualHost.GetVisualChild(System.Int32)">
+            <summary>
+            Gets the visual child of the visual host at the specified index.
+            </summary>
+            <param name="index">The index of the visual child.</param>
+            <returns>Returns the visual child at the specified index.</returns>
+        </member>
+        <member name="T:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator">
+            <summary>
+            Represents a paginator which only returns a specific range of pages.
+            </summary>
+        </member>
+        <member name="M:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.#ctor(System.Windows.Documents.DocumentPaginator,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new <see cref="T:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator"/>
+            </summary>
+            <param name="paginator">The original paginator.</param>
+            <param name="startPageNumber">The starting page number.</param>
+            <param name="endPageNumber">The ending page number.</param>
+        </member>
+        <member name="F:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.startPageNumber">
+            <summary>
+            Contains the starting page number.
+            </summary>
+        </member>
+        <member name="F:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.endPageNumber">
+            <summary>
+            Contains the ending page number.
+            </summary>
+        </member>
+        <member name="F:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.paginator">
+            <summary>
+            Contains the original paginator.
+            </summary>
+        </member>
+        <member name="P:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.IsPageCountValid">
+            <summary>
+            Gets a value that determines whether the page count is valid.
+            </summary>
+        </member>
+        <member name="P:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.PageCount">
+            <summary>
+            Gets the page count.
+            </summary>
+        </member>
+        <member name="P:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.PageSize">
+            <summary>
+            Gets or sets the page size.
+            </summary>
+        </member>
+        <member name="P:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.Source">
+            <summary>
+            Gets the source of the paginator.
+            </summary>
+        </member>
+        <member name="M:MineralManagement.Clients.Desktop.Fixes.PageRangeDocumentPaginator.GetPage(System.Int32)">
+            <summary>
+            Gets the page with the specified page number.
+            </summary>
+            <param name="pageNumber">The page number of the page to be returned.</param>
+            <returns>Returns the page.</returns>
+        </member>
+    </members>
+</doc>
